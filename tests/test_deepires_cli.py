@@ -30,3 +30,25 @@ def test_cli_predict_core():
         df_out = pd.read_csv(outpath)
         df_expected = pd.read_csv(expected_core_scores)
         assert_frame_equal(df_out, df_expected)
+
+def test_cli_predict_main():
+    main_fasta = datadir / 'main_independent.fa'
+    expected_main_scores = resultdir / 'main.csv'
+    with TemporaryDirectory(prefix='deepires_') as tmpdir:
+        outpath = Path(tmpdir) / 'main_scores.csv'
+        result = runner.invoke(app, ['-i', str(main_fasta), '-o', str(outpath)])
+        assert result.exit_code == 0
+        df_out = pd.read_csv(outpath)
+        df_expected = pd.read_csv(expected_main_scores)
+        assert_frame_equal(df_out, df_expected)
+
+def test_cli_predict_5utr():
+    utr5_fasta = datadir / '5utr.fa'
+    expected_5utr_scores = resultdir / 'utr.csv'
+    with TemporaryDirectory(prefix='deepires_') as tmpdir:
+        outpath = Path(tmpdir) / '5utr_scores.csv'
+        result = runner.invoke(app, ['-i', str(utr5_fasta), '-o', str(outpath)])
+        assert result.exit_code == 0
+        df_out = pd.read_csv(outpath)
+        df_expected = pd.read_csv(expected_5utr_scores)
+        assert_frame_equal(df_out, df_expected)
